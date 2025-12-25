@@ -130,7 +130,7 @@ const darkGradientClasses = computed(() => {
 
 <template>
   <div 
-    class="relative min-h-screen w-full pt-24 pb-16 transition-colors duration-500"
+    class="relative min-h-screen w-full pt-24 pb-16 transition-colors duration-500 overflow-hidden"
   >
     <!-- Background Layers with Cross-fade -->
     <div 

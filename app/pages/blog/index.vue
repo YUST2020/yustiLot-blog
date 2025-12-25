@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 
+const { setVariant } = useBackground()
+setVariant('blue')
+
 const { data: posts } = await useFetch('/api/posts', {
   query: { limit: 100 }
 })
@@ -40,7 +43,7 @@ const filteredPosts = computed(() => {
 </script>
 
 <template>
-  <ParticleBackground variant="blue">
+  <div class="container relative z-10 px-4 mx-auto pt-24 pb-16">
     <!-- Main Content Card -->
     <div class="bg-background/60 backdrop-blur-md border border-white/20 shadow-2xl rounded-3xl p-8 md:p-12 min-h-[80vh] flex flex-col">
       
@@ -134,9 +137,8 @@ const filteredPosts = computed(() => {
         <p class="text-xl font-medium">该标签下暂无文章</p>
         <button @click="selectedTag = null" class="mt-4 text-sm underline hover:text-white">清除筛选</button>
       </div>
-
     </div>
-  </ParticleBackground>
+  </div>
 </template>
 
 <style scoped>

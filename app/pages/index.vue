@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { ChevronDown } from 'lucide-vue-next'
 
+const { setVariant } = useBackground()
+setVariant('hidden')
+
 const { data: posts } = await useFetch('/api/posts', {
   query: { limit: 3 }
 })

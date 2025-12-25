@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { Github, Twitter, Mail } from 'lucide-vue-next'
 
+const { setVariant } = useBackground()
+setVariant('purple')
+
 useHead({
   title: '关于我 - MyBlog',
   meta: [
@@ -10,7 +13,7 @@ useHead({
 </script>
 
 <template>
-  <ParticleBackground variant="purple">
+  <div class="container relative z-10 px-4 mx-auto pt-24 pb-16">
     <div class="flex flex-col items-center text-center space-y-8">
       <!-- Avatar -->
       <div class="relative group">
@@ -65,5 +68,5 @@ useHead({
         </div>
       </div>
     </div>
-  </ParticleBackground>
+  </div>
 </template>
