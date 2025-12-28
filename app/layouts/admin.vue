@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { LayoutDashboard, FileText, Settings, LogOut, Sun, Moon } from 'lucide-vue-next'
+import { LayoutDashboard, FileText, Tv, Settings, LogOut, Sun, Moon } from 'lucide-vue-next'
 
 const colorMode = useColorMode()
 const toggleTheme = () => {
@@ -32,6 +32,10 @@ const logout = async () => {
           <FileText class="w-4 h-4" />
           文章管理
         </NuxtLink>
+        <NuxtLink to="/admin/animes" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-secondary transition-colors" active-class="bg-secondary text-primary">
+          <Tv class="w-4 h-4" />
+          番剧管理
+        </NuxtLink>
         <!-- Optional Settings -->
         <div class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-secondary transition-colors cursor-not-allowed opacity-50">
           <Settings class="w-4 h-4" />
@@ -60,7 +64,7 @@ const logout = async () => {
           </div>
         </div>
       </header>
-      <main class="flex-1 p-6 overflow-auto">
+      <main class="flex-1 p-6 overflow-auto relative">
         <slot />
       </main>
     </div>

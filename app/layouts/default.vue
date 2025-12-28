@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Sun, Moon, Menu, X, Home, BookOpen, LayoutDashboard, User } from 'lucide-vue-next'
+import { Sun, Moon, Menu, X, Home, BookOpen, Tv, LayoutDashboard, User } from 'lucide-vue-next'
 import { useWindowScroll } from '@vueuse/core'
 
 const colorMode = useColorMode()
@@ -13,7 +13,7 @@ const toggleTheme = () => {
 const isMenuOpen = ref(false)
 
 const isScrolled = computed(() => y.value > 50)
-const isTransparentPage = computed(() => ['/', '/blog', '/about'].includes(route.path))
+const isTransparentPage = computed(() => ['/', '/blog', '/about', '/animes'].includes(route.path))
 const showScrolledStyle = computed(() => !isTransparentPage.value || isScrolled.value)
 </script>
 
@@ -50,6 +50,14 @@ const showScrolledStyle = computed(() => !isTransparentPage.value || isScrolled.
           >
             <BookOpen class="w-4 h-4" />
             <span>博客</span>
+          </NuxtLink>
+          <NuxtLink 
+            to="/animes" 
+            class="px-5 py-2 rounded-md transition-all duration-300 hover:scale-105 active:scale-95 flex items-center gap-2"
+            :class="showScrolledStyle ? 'hover:bg-secondary text-foreground' : 'text-white/90 hover:bg-white/10 hover:text-white backdrop-blur-sm'"
+          >
+            <Tv class="w-4 h-4" />
+            <span>番剧</span>
           </NuxtLink>
           <NuxtLink 
             to="/about" 
@@ -120,7 +128,7 @@ const showScrolledStyle = computed(() => !isTransparentPage.value || isScrolled.
     </header>
 
     <!-- Main Content -->
-    <main class="flex-1">
+    <main class="flex-1 relative">
       <slot />
     </main>
 

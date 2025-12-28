@@ -1,15 +1,12 @@
-const animate = require("tailwindcss-animate")
+import type { Config } from 'tailwindcss'
+import animate from 'tailwindcss-animate'
+import typography from '@tailwindcss/typography'
 
-/** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
   darkMode: ["class"],
   content: [
-    './pages/**/*.{ts,tsx,vue}',
-    './components/**/*.{ts,tsx,vue}',
-    './layouts/**/*.{ts,tsx,vue}',
     './app/**/*.{ts,tsx,vue}',
-    './src/**/*.{ts,tsx,vue}',
-	],
+  ],
   theme: {
     container: {
       center: true,
@@ -61,12 +58,12 @@ module.exports = {
       },
       keyframes: {
         "accordion-down": {
-          from: { height: 0 },
+          from: { height: "0" },
           to: { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
           from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: 0 },
+          to: { height: "0" },
         },
       },
       animation: {
@@ -75,5 +72,6 @@ module.exports = {
       },
     },
   },
-  plugins: [animate, require('@tailwindcss/typography')],
-}
+  plugins: [animate, typography],
+} satisfies Config
+

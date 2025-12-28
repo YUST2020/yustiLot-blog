@@ -17,13 +17,16 @@ export default defineNuxtConfig({
     classSuffix: ''
   },
   tailwindcss: {
-    cssPath: ['~/assets/css/main.css', { injectPosition: 'first' }],
+    cssPath: '~/assets/css/main.css',
     configPath: 'tailwind.config.ts',
+    exposeConfig: true,
+    viewer: true,
   },
   future: {
     compatibilityVersion: 4,
   },
   app: {
-    pageTransition: { name: 'page', mode: 'out-in' }
+    pageTransition: { name: 'page', mode: 'default' },
+    layoutTransition: { name: 'layout', mode: 'default' }
   }
 })

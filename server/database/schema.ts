@@ -24,3 +24,15 @@ export const posts = sqliteTable('posts', {
   createdAt: integer('created_at', { mode: 'timestamp' }).default(sql`(strftime('%s', 'now'))`),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).default(sql`(strftime('%s', 'now'))`),
 })
+
+export const animes = sqliteTable('animes', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  title: text('title').notNull(),
+  coverImage: text('cover_image').notNull(),
+  rating: integer('rating').notNull(), // 0-10
+  review: text('review'),
+  releaseYear: integer('release_year').notNull(),
+  releaseQuarter: integer('release_quarter').notNull(), // 1, 4, 7, 12
+  createdAt: integer('created_at', { mode: 'timestamp' }).default(sql`(strftime('%s', 'now'))`),
+  updatedAt: integer('updated_at', { mode: 'timestamp' }).default(sql`(strftime('%s', 'now'))`),
+})
