@@ -2,9 +2,6 @@
 import MarkdownIt from 'markdown-it'
 import { Calendar, Eye, Clock, ArrowLeft, Share2, Tag } from 'lucide-vue-next'
 
-const { setVariant } = useBackground()
-setVariant('blue')
-
 const route = useRoute()
 const { data: post } = await useFetch(`/api/posts/${route.params.slug}`)
 
@@ -31,11 +28,11 @@ useHead({
 </script>
 
 <template>
-  <div class="container relative z-10 px-4 mx-auto pt-24 pb-16">
+  <ParticleBackground variant="blue">
     <div v-if="post" class="min-h-[80vh] flex flex-col items-center">
       
       <!-- Main Content Card -->
-      <div class="w-full max-w-7xl bg-background/60 backdrop-blur-md border border-white/20 shadow-2xl rounded-3xl p-6 md:p-12 relative">
+      <div class="w-full max-w-7xl bg-background/60 backdrop-blur-md border border-white/20 shadow-2xl rounded-3xl p-6 md:p-12 relative mx-4">
         
         <!-- Breadcrumb & Back -->
         <div class="mb-8">
@@ -112,7 +109,7 @@ useHead({
 
       </div>
     </div>
-  </div>
+  </ParticleBackground>
 </template>
 
 <style>

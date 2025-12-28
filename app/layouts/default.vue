@@ -18,8 +18,7 @@ const showScrolledStyle = computed(() => !isTransparentPage.value || isScrolled.
 </script>
 
 <template>
-  <div class="min-h-screen text-foreground transition-colors duration-300 font-sans flex flex-col">
-    <GlobalBackground />
+  <div class="min-h-screen bg-background text-foreground transition-colors duration-300 font-sans flex flex-col">
     <!-- Navbar -->
     <header 
       class="fixed top-0 z-50 w-full transition-all duration-300"
