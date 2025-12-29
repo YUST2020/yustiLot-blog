@@ -21,23 +21,27 @@ const props = defineProps<{
 
 const emit = defineEmits(['submit'])
 
+const getCachedValue = (key: string, defaultValue: any) => {
+  if (import.meta.server) return defaultValue
+  return localStorage.getItem(key) || defaultValue
+}
+
 const form = ref({
-  title: '',
-  coverImage: '',
-  rating: 0,
-  review: '',
-  releaseYear: new Date().getFullYear(),
-  releaseQuarter: 1,
-  ...props.initialData
+  title: props.initialData?.title || '',
+  coverImage: props.initialData?.coverImage || '',
+  rating: props.initialData?.rating || 0,
+  review: props.initialData?.review || '',
+  releaseYear: String(props.initialData?.releaseYear || getCachedValue('last_anime_year', new Date().getFullYear())),
+  releaseQuarter: String(props.initialData?.releaseQuarter || getCachedValue('last_anime_quarter', 1))
 })
 
 const loading = ref(false)
 
 const quarters = [
-  { label: '1月 (冬)', value: 1 },
-  { label: '4月 (春)', value: 4 },
-  { label: '7月 (夏)', value: 7 },
-  { label: '12月 (秋/冬)', value: 12 }
+  { label: '1月', value: 1 },
+  { label: '4月', value: 4 },
+  { label: '7月', value: 7 },
+  { label: '10月', value: 10 }
 ]
 
 const years = Array.from({ length: new Date().getFullYear() - 2005 + 2 }, (_, i) => 2005 + i).reverse()
@@ -45,6 +49,12 @@ const years = Array.from({ length: new Date().getFullYear() - 2005 + 2 }, (_, i)
 const onSubmit = async () => {
   loading.value = true
   try {
+    // 缓存当前输入的年份和季度
+    if (!props.isEdit) {
+      localStorage.setItem('last_anime_year', form.value.releaseYear)
+      localStorage.setItem('last_anime_quarter', form.value.releaseQuarter)
+    }
+    
     await emit('submit', {
       ...form.value,
       releaseYear: Number(form.value.releaseYear),

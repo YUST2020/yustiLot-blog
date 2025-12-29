@@ -42,7 +42,7 @@ const getQuarterLabel = (q: number) => {
     1: '1月',
     4: '4月',
     7: '7月',
-    12: '12月'
+    10: '10月'
   }
   return labels[q] || q + '月'
 }

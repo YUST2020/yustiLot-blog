@@ -32,7 +32,7 @@ export const animes = sqliteTable('animes', {
   rating: integer('rating').notNull(), // 0-10
   review: text('review'),
   releaseYear: integer('release_year').notNull(),
-  releaseQuarter: integer('release_quarter').notNull(), // 1, 4, 7, 12
+  releaseQuarter: integer('release_quarter').notNull(), // 1, 4, 7, 10
   createdAt: integer('created_at', { mode: 'timestamp' }).default(sql`(strftime('%s', 'now'))`),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).default(sql`(strftime('%s', 'now'))`),
 })

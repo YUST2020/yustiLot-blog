@@ -92,7 +92,7 @@ const getQuarterLabel = (q: number) => {
     1: '冬',
     4: '春',
     7: '夏',
-    12: '秋'
+    10: '秋'
   }
   return labels[q] || q + '月'
 }
