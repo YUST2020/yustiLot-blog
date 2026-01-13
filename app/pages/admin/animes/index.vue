@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Star, Edit, Trash2, Plus } from 'lucide-vue-next'
+import { Star, Edit, Trash2, Plus, Search, ArrowUpDown } from 'lucide-vue-next'
 import {
   Table,
   TableBody,
@@ -10,6 +10,14 @@ import {
 } from '~/components/ui/table'
 import { Button } from '~/components/ui/button'
 import { Badge } from '~/components/ui/badge'
+import { Input } from '~/components/ui/input'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '~/components/ui/select'
 import {
   Tooltip,
   TooltipContent,
@@ -24,7 +32,59 @@ definePageMeta({
   middleware: 'auth'
 })
 
-const { data: animes, refresh } = await useFetch('/api/admin/animes')
+const route = useRoute()
+const router = useRouter()
+
+// Query Params
+const page = ref(Number(route.query.page) || 1)
+const search = ref((route.query.search as string) || '')
+const sortBy = ref((route.query.sortBy as string) || 'releaseDate')
+const order = ref((route.query.order as string) || 'desc')
+
+const { data, refresh } = await useFetch('/api/admin/animes', {
+  key: 'admin-animes-list',
+  query: { 
+    page,
+    search,
+    sortBy,
+    order
+  }
+})
+
+// Debounced update for search
+let searchTimeout: NodeJS.Timeout
+const handleSearch = (val: string) => {
+  clearTimeout(searchTimeout)
+  searchTimeout = setTimeout(() => {
+    search.value = val
+    page.value = 1 // Reset to first page on search
+  }, 300)
+}
+
+// Watchers to sync URL
+watch([page, search, sortBy, order], () => {
+  const query: any = {
+    page: page.value,
+  }
+  
+  if (search.value) query.search = search.value
+  if (sortBy.value !== 'releaseDate') query.sortBy = sortBy.value
+  if (order.value !== 'desc') query.order = order.value
+
+  router.push({ query })
+})
+
+// Sync from URL changes (e.g. back button)
+watch(() => route.query, (newQuery) => {
+  page.value = Number(newQuery.page) || 1
+  search.value = (newQuery.search as string) || ''
+  sortBy.value = (newQuery.sortBy as string) || 'releaseDate'
+  order.value = (newQuery.order as string) || 'desc'
+})
+
+const animes = computed(() => data.value?.items || [])
+const totalPages = computed(() => data.value?.totalPages || 0)
+const total = computed(() => data.value?.total || 0)
 
 const deleteAnime = async (id: number) => {
   if (!confirm('确定要删除这条番剧记录吗？')) return
@@ -46,6 +106,10 @@ const getQuarterLabel = (q: number) => {
   }
   return labels[q] || q + '月'
 }
+
+const toggleOrder = () => {
+  order.value = order.value === 'desc' ? 'asc' : 'desc'
+}
 </script>
 
 <template>
@@ -60,6 +124,35 @@ const getQuarterLabel = (q: number) => {
           <Plus class="w-4 h-4" /> 新增记录
         </NuxtLink>
       </Button>
+    </div>
+
+    <!-- Filters -->
+    <div class="flex items-center gap-4">
+      <div class="relative w-full max-w-sm">
+        <Search class="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+        <Input
+          :model-value="search"
+          @update:model-value="handleSearch"
+          type="search"
+          placeholder="搜索番剧..."
+          class="pl-8"
+        />
+      </div>
+      <div class="flex items-center gap-2 ml-auto">
+        <Select v-model="sortBy">
+          <SelectTrigger class="w-[180px]">
+            <SelectValue placeholder="排序方式" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="releaseDate">上映时间</SelectItem>
+            <SelectItem value="rating">评分</SelectItem>
+            <SelectItem value="createdAt">创建时间</SelectItem>
+          </SelectContent>
+        </Select>
+        <Button variant="outline" size="icon" @click="toggleOrder" :title="order === 'desc' ? '降序' : '升序'">
+          <ArrowUpDown class="h-4 w-4" :class="{ 'rotate-180': order === 'asc' }" />
+        </Button>
+      </div>
     </div>
 
     <div class="border rounded-xl overflow-hidden bg-card shadow-sm">
@@ -133,11 +226,38 @@ const getQuarterLabel = (q: number) => {
           </TableRow>
           <TableRow v-if="!animes?.length">
             <TableCell colspan="4" class="h-32 text-center text-muted-foreground">
-              暂无番剧记录
+              {{ search ? '未找到相关番剧' : '暂无番剧记录' }}
             </TableCell>
           </TableRow>
         </TableBody>
       </Table>
+    </div>
+
+    <div class="flex items-center justify-between">
+       <div class="text-sm text-muted-foreground">
+        共 {{ total }} 条记录
+      </div>
+      <div class="flex items-center space-x-2">
+        <Button
+          variant="outline"
+          size="sm"
+          :disabled="page <= 1"
+          @click="page--"
+        >
+          上一页
+        </Button>
+        <div class="text-sm text-muted-foreground">
+          第 {{ page }} 页 / 共 {{ totalPages }} 页
+        </div>
+        <Button
+          variant="outline"
+          size="sm"
+          :disabled="page >= totalPages"
+          @click="page++"
+        >
+          下一页
+        </Button>
+      </div>
     </div>
   </div>
 </template>

@@ -14,6 +14,7 @@ const createAnime = async (payload: any) => {
       body: payload
     })
     toast.success('番剧记录已创建')
+    await clearNuxtData('admin-animes-list')
     navigateTo('/admin/animes')
   } catch (error) {
     toast.error('创建失败')

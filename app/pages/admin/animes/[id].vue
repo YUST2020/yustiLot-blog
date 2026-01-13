@@ -8,6 +8,7 @@ definePageMeta({
 })
 
 const route = useRoute()
+const router = useRouter()
 const id = route.params.id
 
 const { data: anime } = await useFetch(`/api/admin/animes/${id}`)
@@ -19,7 +20,8 @@ const updateAnime = async (payload: any) => {
       body: payload
     })
     toast.success('番剧记录已更新')
-    navigateTo('/admin/animes')
+    await clearNuxtData('admin-animes-list')
+    router.back()
   } catch (error) {
     toast.error('更新失败')
   }
