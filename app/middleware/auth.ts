@@ -1,7 +1,4 @@
 export default defineNuxtRouteMiddleware((to, from) => {
-  const { loggedIn } = useUserSession()
-
-  if (!loggedIn.value) {
-    return navigateTo('/login')
-  }
+  // Authentication is handled by the admin layout which shows a login dialog
+  // This middleware is kept to mark routes that require authentication context
 })

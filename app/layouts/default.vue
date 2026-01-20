@@ -83,15 +83,14 @@ const shouldShowDarkText = computed(() => {
             <User class="w-4 h-4" />
             <span>关于</span>
           </NuxtLink>
-          <LoginDialog>
-             <button 
-              class="px-5 py-2 rounded-md transition-all duration-300 hover:scale-105 active:scale-95 flex items-center gap-2"
-              :class="shouldShowDarkText ? 'hover:bg-secondary text-foreground' : 'text-white/90 hover:bg-white/10 hover:text-white backdrop-blur-sm'"
-             >
-               <LayoutDashboard class="w-4 h-4" />
-               <span>后台</span>
-             </button>
-          </LoginDialog>
+          <NuxtLink 
+            to="/admin" 
+            class="px-5 py-2 rounded-md transition-all duration-300 hover:scale-105 active:scale-95 flex items-center gap-2"
+            :class="shouldShowDarkText ? 'hover:bg-secondary text-foreground' : 'text-white/90 hover:bg-white/10 hover:text-white backdrop-blur-sm'"
+          >
+            <LayoutDashboard class="w-4 h-4" />
+            <span>后台</span>
+          </NuxtLink>
         </nav>
 
         <div class="flex items-center gap-4">
@@ -133,12 +132,10 @@ const shouldShowDarkText = computed(() => {
             <User class="w-4 h-4" />
             <span>关于</span>
           </NuxtLink>
-           <LoginDialog>
-             <button @click="isMenuOpen = false" class="transition-colors hover:text-primary text-left w-full flex items-center gap-2">
-                <LayoutDashboard class="w-4 h-4" />
-                <span>后台</span>
-             </button>
-           </LoginDialog>
+          <NuxtLink to="/admin" @click="isMenuOpen = false" class="transition-colors hover:text-primary flex items-center gap-2">
+            <LayoutDashboard class="w-4 h-4" />
+            <span>后台</span>
+          </NuxtLink>
         </nav>
       </div>
     </header>

@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { LayoutDashboard, FileText, Tv, Settings, LogOut, Sun, Moon } from 'lucide-vue-next'
+import { Skeleton } from '~/components/ui/skeleton'
 
 const colorMode = useColorMode()
 const toggleTheme = () => {
   colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
 }
 
-const { clear } = useUserSession()
+const { loggedIn, clear } = useUserSession()
 
 const logout = async () => {
   await clear()
@@ -65,8 +66,23 @@ const logout = async () => {
         </div>
       </header>
       <main class="flex-1 p-6 overflow-auto relative">
-        <slot />
+        <div v-if="loggedIn">
+          <slot />
+        </div>
+        <div v-else class="space-y-4">
+          <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <Skeleton class="h-[120px] rounded-xl" />
+            <Skeleton class="h-[120px] rounded-xl" />
+            <Skeleton class="h-[120px] rounded-xl" />
+            <Skeleton class="h-[120px] rounded-xl" />
+          </div>
+          <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+            <Skeleton class="col-span-4 h-[400px] rounded-xl" />
+            <Skeleton class="col-span-3 h-[400px] rounded-xl" />
+          </div>
+        </div>
       </main>
     </div>
+    <LoginDialog :open="!loggedIn" prevent-close />
   </div>
 </template>
