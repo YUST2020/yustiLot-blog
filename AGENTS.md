@@ -27,3 +27,13 @@
         *   特殊的边界条件处理 (Edge cases)。
         *   不得不使用的 Hack 手段及其原因。
         *   复杂的正则或不易理解的配置项。
+
+## 4. 弹窗交互规范 (Dialog Interactions)
+*   **推荐使用函数式弹窗**:
+    *   对于复杂的业务弹窗（如表单、确认框），推荐使用 `useDialogOpen` 进行函数式调用，避免在 Template 中维护大量的 `visible` 状态。
+*   **组件开发**:
+    *   弹窗组件应接收 `modelValue` (boolean) 来控制显示，并 emit `update:modelValue`。
+    *   通过 `emit('confirm', data)` 返回处理结果，通过 `emit('cancel')` 取消操作。
+*   **调用方式**:
+    *   使用 `useDialogOpen(Component, options)` 调用。
+    *   在 `options.onConfirm` 中处理异步业务（如 API 请求），如果 Promise reject 则会自动阻止弹窗关闭。

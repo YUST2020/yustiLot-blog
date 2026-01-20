@@ -26,6 +26,8 @@ import {
 } from '~/components/ui/tooltip'
 
 import { toast } from 'vue-sonner'
+import { useDialogOpen } from '~/lib/useDialogOpen'
+import AnimeDialog from '~/components/admin/AnimeDialog.vue'
 
 definePageMeta({
   layout: 'admin',
@@ -86,6 +88,35 @@ const animes = computed(() => data.value?.items || [])
 const totalPages = computed(() => data.value?.totalPages || 0)
 const total = computed(() => data.value?.total || 0)
 
+const openCreateDialog = () => {
+  useDialogOpen(AnimeDialog, {
+    isEdit: false,
+    onConfirm: async (formData: any) => {
+      await $fetch('/api/admin/animes', {
+        method: 'POST',
+        body: formData
+      })
+      toast.success('番剧记录已创建')
+      refresh()
+    }
+  })
+}
+
+const openEditDialog = (anime: any) => {
+  useDialogOpen(AnimeDialog, {
+    isEdit: true,
+    initialData: anime,
+    onConfirm: async (formData: any) => {
+      await $fetch(`/api/admin/animes/${anime.id}`, {
+        method: 'PUT',
+        body: formData
+      })
+      toast.success('番剧记录已更新')
+      refresh()
+    }
+  })
+}
+
 const deleteAnime = async (id: number) => {
   if (!confirm('确定要删除这条番剧记录吗？')) return
   try {
@@ -119,10 +150,8 @@ const toggleOrder = () => {
         <h1 class="text-3xl font-bold tracking-tight">番剧管理</h1>
         <p class="text-muted-foreground mt-1 text-sm">记录和管理我看过的番剧。</p>
       </div>
-      <Button as-child shadow-sm>
-        <NuxtLink to="/admin/animes/create" class="flex items-center gap-2">
-          <Plus class="w-4 h-4" /> 新增记录
-        </NuxtLink>
+      <Button shadow-sm @click="openCreateDialog">
+        <Plus class="w-4 h-4 mr-2" /> 新增记录
       </Button>
     </div>
 
@@ -178,7 +207,7 @@ const toggleOrder = () => {
                 </div>
                 <div class="space-y-1">
                   <div class="font-semibold text-foreground leading-none">{{ anime.title }}</div>
-                  <div class="text-xs text-muted-foreground line-clamp-1 max-w-[200px]" :title="anime.review">
+                  <div class="text-xs text-muted-foreground line-clamp-1 max-w-[200px]" :title="anime.review!">
                     {{ anime.review || '暂无评价' }}
                   </div>
                 </div>
@@ -201,10 +230,8 @@ const toggleOrder = () => {
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger as-child>
-                      <Button variant="ghost" size="icon" as-child class="h-8 w-8">
-                        <NuxtLink :to="`/admin/animes/${anime.id}`">
-                          <Edit class="w-4 h-4 text-muted-foreground hover:text-foreground" />
-                        </NuxtLink>
+                      <Button variant="ghost" size="icon" @click="openEditDialog(anime)" class="h-8 w-8">
+                        <Edit class="w-4 h-4 text-muted-foreground hover:text-foreground" />
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent>编辑</TooltipContent>
