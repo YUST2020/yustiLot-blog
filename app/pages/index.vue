@@ -9,37 +9,54 @@ const scrollToContent = () => {
   const content = document.getElementById('recent-posts')
   content?.scrollIntoView({ behavior: 'smooth' })
 }
+
+// Typewriter Logic
+const fullText = "记录生活，分享知识，保持好奇。";
+const typewriterText = ref("");
+
+onMounted(() => {
+  let i = 0;
+  const type = () => {
+    if (i < fullText.length) {
+      typewriterText.value += fullText.charAt(i);
+      i++;
+      setTimeout(type, 100);
+    }
+  };
+  // Start after a small delay
+  setTimeout(type, 800);
+});
 </script>
 
 <template>
   <div>
     <!-- Hero Section -->
     <section class="relative min-h-screen flex items-center justify-center px-4 overflow-hidden isolate">
-      <!-- Background Image -->
-      <div 
-        class="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat transition-transform duration-1000 hover:scale-105"
-        style="background-image: url('https://images.unsplash.com/photo-1487147264018-f937fba0c817?q=80&w=2070&auto=format&fit=crop')"
-      >
-        <!-- Overlay -->
-        <div class="absolute inset-0 bg-black/20 dark:bg-black/40"></div>
-      </div>
+      <!-- Background -->
+      <RubiksCubeBackground />
       
-      <div class="container mx-auto text-center space-y-6 relative z-10" v-motion-slide-visible-once-bottom>
-        <h1 class="text-4xl md:text-7xl font-bold tracking-tighter text-white drop-shadow-md">
-          探索自然与技术的边界
-        </h1>
-        <p class="text-xl md:text-2xl text-white/90 max-w-2xl mx-auto font-light drop-shadow-sm">
-          记录生活，分享知识，保持好奇。
-        </p>
-        <div class="flex justify-center gap-4 pt-8">
-          <NuxtLink to="/blog" class="px-8 py-3 bg-white/20 backdrop-blur-md border border-white/30 text-white rounded-full font-medium hover:bg-white/30 transition-all hover:scale-105 shadow-lg">
-            开始阅读
-          </NuxtLink>
+      <div class="container mx-auto relative z-10 grid grid-cols-1 md:grid-cols-2 gap-8 items-center pointer-events-none" v-motion-slide-visible-once-bottom>
+        <!-- Empty Left Column for Cube -->
+        <div class="hidden md:block"></div>
+
+        <!-- Right Column for Content -->
+        <div class="text-center md:text-left space-y-6 pointer-events-auto p-4 md:p-8 rounded-3xl dark:bg-black/40 dark:backdrop-blur-md transition-all">
+            <h1 class="hero-title text-4xl md:text-7xl font-bold tracking-tighter text-foreground drop-shadow-sm transition-colors">
+            探索自然与技术的边界
+            </h1>
+            <p class="hero-subtitle text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto md:mx-0 font-light drop-shadow-sm min-h-[2rem] transition-colors">
+            <span>{{ typewriterText }}</span><span class="animate-pulse ml-1">|</span>
+            </p>
+            <div class="flex justify-center md:justify-start gap-4 pt-4 md:pt-8">
+            <NuxtLink to="/blog" class="hero-button px-8 py-3 bg-gray-900/10 dark:bg-white/10 backdrop-blur-md border border-gray-900/20 dark:border-white/20 text-foreground rounded-full font-medium hover:bg-gray-900/20 dark:hover:bg-white/20 transition-all hover:scale-105 shadow-lg">
+                开始阅读
+            </NuxtLink>
+            </div>
         </div>
       </div>
 
       <!-- Bouncing Arrow -->
-      <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce cursor-pointer text-white/80 hover:text-white transition-colors" @click="scrollToContent">
+      <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce cursor-pointer text-gray-600 dark:text-white/80 hover:text-gray-900 dark:hover:text-white transition-colors" @click="scrollToContent">
         <ChevronDown class="w-10 h-10" />
       </div>
     </section>
@@ -60,7 +77,7 @@ const scrollToContent = () => {
           </div>
           <div class="p-6 space-y-2">
             <div class="text-xs text-muted-foreground">
-              {{ new Date(post.publishedAt).toLocaleDateString() }}
+              {{ new Date(post.publishedAt!).toLocaleDateString() }}
             </div>
             <h3 class="text-xl font-bold group-hover:text-primary transition-colors line-clamp-2">
               {{ post.title }}
@@ -74,3 +91,27 @@ const scrollToContent = () => {
     </section>
   </div>
 </template>
+
+<style scoped>
+/* Force high contrast in dark mode */
+:global(.dark) .hero-title {
+  color: #ffffff !important;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+}
+
+:global(.dark) .hero-subtitle {
+  color: #e5e7eb !important; /* gray-200 */
+  text-shadow: 0 1px 5px rgba(0,0,0,0.5);
+}
+
+:global(.dark) .hero-button {
+  background-color: rgba(255, 255, 255, 0.15) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3) !important;
+}
+
+:global(.dark) .hero-button:hover {
+  background-color: rgba(255, 255, 255, 0.25) !important;
+}
+</style>

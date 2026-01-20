@@ -15,6 +15,22 @@ const isMenuOpen = ref(false)
 const isScrolled = computed(() => y.value > 50)
 const isTransparentPage = computed(() => ['/', '/blog', '/about', '/animes'].includes(route.path))
 const showScrolledStyle = computed(() => !isTransparentPage.value || isScrolled.value)
+const isHomePage = computed(() => route.path === '/')
+const shouldShowDarkText = computed(() => {
+    // If scrolled, always use dark text (because background becomes solid/blurred)
+    if (showScrolledStyle.value) return true;
+    
+    // If on homepage and not scrolled
+    if (isHomePage.value) {
+        // In dark mode, we want white text on the dark background
+        if (colorMode.value === 'dark') return false;
+        // In light mode, we want dark text on the light beige background
+        return true;
+    }
+    
+    // Default fallback
+    return false;
+})
 </script>
 
 <template>
@@ -29,8 +45,8 @@ const showScrolledStyle = computed(() => !isTransparentPage.value || isScrolled.
       ]"
     >
       <div class="container flex items-center justify-between px-4 md:px-6">
-        <NuxtLink to="/" class="flex items-center gap-2 font-bold text-xl tracking-tight transition-colors" :class="showScrolledStyle ? 'text-foreground' : 'text-white'">
-          <span>MyBlog</span>
+        <NuxtLink to="/" class="flex items-center gap-2 font-bold text-xl tracking-tight transition-colors" :class="shouldShowDarkText ? 'text-foreground' : 'text-white'">
+          <span>XieJava's BLOG</span>
         </NuxtLink>
 
         <!-- Desktop Nav -->
@@ -38,7 +54,7 @@ const showScrolledStyle = computed(() => !isTransparentPage.value || isScrolled.
           <NuxtLink 
             to="/" 
             class="px-5 py-2 rounded-md transition-all duration-300 hover:scale-105 active:scale-95 flex items-center gap-2"
-            :class="showScrolledStyle ? 'hover:bg-secondary text-foreground' : 'text-white/90 hover:bg-white/10 hover:text-white backdrop-blur-sm'"
+            :class="shouldShowDarkText ? 'hover:bg-secondary text-foreground' : 'text-white/90 hover:bg-white/10 hover:text-white backdrop-blur-sm'"
           >
             <Home class="w-4 h-4" />
             <span>首页</span>
@@ -46,7 +62,7 @@ const showScrolledStyle = computed(() => !isTransparentPage.value || isScrolled.
           <NuxtLink 
             to="/blog" 
             class="px-5 py-2 rounded-md transition-all duration-300 hover:scale-105 active:scale-95 flex items-center gap-2"
-            :class="showScrolledStyle ? 'hover:bg-secondary text-foreground' : 'text-white/90 hover:bg-white/10 hover:text-white backdrop-blur-sm'"
+            :class="shouldShowDarkText ? 'hover:bg-secondary text-foreground' : 'text-white/90 hover:bg-white/10 hover:text-white backdrop-blur-sm'"
           >
             <BookOpen class="w-4 h-4" />
             <span>博客</span>
@@ -54,7 +70,7 @@ const showScrolledStyle = computed(() => !isTransparentPage.value || isScrolled.
           <NuxtLink 
             to="/animes" 
             class="px-5 py-2 rounded-md transition-all duration-300 hover:scale-105 active:scale-95 flex items-center gap-2"
-            :class="showScrolledStyle ? 'hover:bg-secondary text-foreground' : 'text-white/90 hover:bg-white/10 hover:text-white backdrop-blur-sm'"
+            :class="shouldShowDarkText ? 'hover:bg-secondary text-foreground' : 'text-white/90 hover:bg-white/10 hover:text-white backdrop-blur-sm'"
           >
             <Tv class="w-4 h-4" />
             <span>番剧</span>
@@ -62,7 +78,7 @@ const showScrolledStyle = computed(() => !isTransparentPage.value || isScrolled.
           <NuxtLink 
             to="/about" 
             class="px-5 py-2 rounded-md transition-all duration-300 hover:scale-105 active:scale-95 flex items-center gap-2"
-            :class="showScrolledStyle ? 'hover:bg-secondary text-foreground' : 'text-white/90 hover:bg-white/10 hover:text-white backdrop-blur-sm'"
+            :class="shouldShowDarkText ? 'hover:bg-secondary text-foreground' : 'text-white/90 hover:bg-white/10 hover:text-white backdrop-blur-sm'"
           >
             <User class="w-4 h-4" />
             <span>关于</span>
@@ -70,7 +86,7 @@ const showScrolledStyle = computed(() => !isTransparentPage.value || isScrolled.
           <LoginDialog>
              <button 
               class="px-5 py-2 rounded-md transition-all duration-300 hover:scale-105 active:scale-95 flex items-center gap-2"
-              :class="showScrolledStyle ? 'hover:bg-secondary text-foreground' : 'text-white/90 hover:bg-white/10 hover:text-white backdrop-blur-sm'"
+              :class="shouldShowDarkText ? 'hover:bg-secondary text-foreground' : 'text-white/90 hover:bg-white/10 hover:text-white backdrop-blur-sm'"
              >
                <LayoutDashboard class="w-4 h-4" />
                <span>后台</span>
@@ -82,7 +98,7 @@ const showScrolledStyle = computed(() => !isTransparentPage.value || isScrolled.
            <button 
             @click="toggleTheme" 
             class="p-2 rounded-full transition-colors focus:outline-none"
-            :class="showScrolledStyle ? 'hover:bg-secondary text-foreground' : 'text-white hover:bg-white/10'"
+            :class="shouldShowDarkText ? 'hover:bg-secondary text-foreground' : 'text-white hover:bg-white/10'"
             aria-label="Toggle theme"
           >
              <ClientOnly>
@@ -95,7 +111,7 @@ const showScrolledStyle = computed(() => !isTransparentPage.value || isScrolled.
           </button>
 
           <!-- Mobile Menu Toggle -->
-          <button class="md:hidden p-2" @click="isMenuOpen = !isMenuOpen" :class="showScrolledStyle ? 'text-foreground' : 'text-white'">
+          <button class="md:hidden p-2" @click="isMenuOpen = !isMenuOpen" :class="shouldShowDarkText ? 'text-foreground' : 'text-white'">
             <Menu v-if="!isMenuOpen" class="w-6 h-6" />
             <X v-else class="w-6 h-6" />
           </button>

@@ -12,8 +12,10 @@
   "dependencies": {
     "@libsql/client": "^0.15.15",
     "@nuxtjs/color-mode": "^4.0.0",
+    "@tweenjs/tween.js": "^25.0.0",
     "@types/bcryptjs": "^2.4.6",
     "@types/markdown-it": "^14.1.2",
+    "@types/three": "^0.182.0",
     "@vueuse/core": "^14.1.0",
     "@vueuse/motion": "^3.0.3",
     "bcryptjs": "^3.0.3",
@@ -27,6 +29,7 @@
     "radix-vue": "^1.9.17",
     "reka-ui": "^2.7.0",
     "tailwind-merge": "^3.4.0",
+    "three": "^0.182.0",
     "vue": "^3.5.26",
     "vue-router": "^4.6.4",
     "vue-sonner": "^2.0.9"

@@ -100,7 +100,7 @@ const login = async () => {
                 <label class="text-xs font-bold ml-1 text-muted-foreground group-focus-within:text-purple-500 transition-colors uppercase tracking-wider">Password</label>
                 <div class="relative transition-all duration-300 group-focus-within:scale-[1.02] group-focus-within:-translate-y-1">
                   <div class="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl blur opacity-0 group-focus-within:opacity-20 transition-opacity duration-300"></div>
-                  <Lock class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-purple-500 transition-colors z-20" />
+                  <LockIcon class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-purple-500 transition-colors z-20" />
                   <input 
                     v-model="password" 
                     type="password" 
