@@ -22,3 +22,24 @@ logs
 .env
 .env.*
 !.env.example
+
+# ===== 前后端分离重构（C0 起） =====
+
+# frontend（Vite + Vue 3）
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+frontend/.env
+frontend/.env.*
+!frontend/.env.example
+
+# backend（NestJS + Prisma）
+backend/node_modules/
+backend/dist/
+backend/.env
+backend/.env.*
+!backend/.env.example
+
+# scripts（一次性迁移脚本）
+scripts/node_modules/
+scripts/*.log

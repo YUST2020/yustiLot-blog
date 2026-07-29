@@ -1,0 +1,57 @@
+// Prisma schema —— yustiLot-blog 后端
+// 字段与现有 SQLite (Drizzle schema) 1:1 对齐，列名保持 snake_case
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// ===== 用户（管理员） =====
+model User {
+  id        Int      @id @default(autoincrement())
+  username  String   @unique @db.VarChar(64)
+  password  String   @db.VarChar(255) // bcrypt 哈希
+  name      String?  @db.VarChar(64)
+  avatar    String?  @db.VarChar(512)
+  createdAt DateTime @default(now()) @map("created_at") @db.DateTime(3)
+
+  @@map("users")
+}
+
+// ===== 博客文章 =====
+model Post {
+  id          Int       @id @default(autoincrement())
+  title       String    @db.VarChar(255)
+  slug        String    @unique @db.VarChar(255)
+  content     String    @db.LongText
+  excerpt     String?   @db.VarChar(500)
+  coverImage  String?   @db.VarChar(512) @map("cover_image")
+  // 保持「JSON 字符串」语义：前端 JSON.parse，故用 LongText 而非原生 JSON 类型
+  tags        String?   @db.LongText
+  isPublished Boolean   @default(false) @map("is_published") @db.TinyInt
+  viewCount   Int       @default(0) @map("view_count")
+  publishedAt DateTime? @map("published_at") @db.DateTime(3)
+  createdAt   DateTime  @default(now()) @map("created_at") @db.DateTime(3)
+  updatedAt   DateTime  @default(now()) @updatedAt @map("updated_at") @db.DateTime(3)
+
+  @@map("posts")
+}
+
+// ===== 番剧记录 =====
+model Anime {
+  id             Int      @id @default(autoincrement())
+  title          String   @db.VarChar(255)
+  coverImage     String   @db.VarChar(512) @map("cover_image")
+  rating         Int // 0-10，含奇数（半分）
+  review         String?  @db.VarChar(500)
+  releaseYear    Int      @map("release_year")
+  releaseQuarter Int      @map("release_quarter") // {1,4,7,10}
+  createdAt      DateTime @default(now()) @map("created_at") @db.DateTime(3)
+  updatedAt      DateTime @default(now()) @updatedAt @map("updated_at") @db.DateTime(3)
+
+  @@map("animes")
+}
