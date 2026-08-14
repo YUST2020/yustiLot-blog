@@ -14,13 +14,14 @@ function requireValidId(id: number) {
 // - releaseDate → [release_year, release_quarter]
 // - rating → [rating]
 // - 其他 → [created_at]
+// 排序参数完全相同时，以 created_at 从晚到早兜底
 function buildOrderBy(sortBy: string, order: 'asc' | 'desc'): Prisma.AnimeOrderByWithRelationInput[] {
   const dir = order;
   if (sortBy === 'rating') {
-    return [{ rating: dir }];
+    return [{ rating: dir }, { createdAt: 'desc' }];
   }
   if (sortBy === 'releaseDate') {
-    return [{ releaseYear: dir }, { releaseQuarter: dir }];
+    return [{ releaseYear: dir }, { releaseQuarter: dir }, { createdAt: 'desc' }];
   }
   return [{ createdAt: dir }];
 }

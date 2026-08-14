@@ -108,6 +108,19 @@
   }
 }
 
+/* 主题切换圆形扩散过渡（View Transitions API），clip-path 动画由 JS 驱动 */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-old(root) {
+  z-index: 0;
+}
+::view-transition-new(root) {
+  z-index: 1;
+}
+
 /* ===== 页面过渡动画（交叉淡入淡出）=====
    默认模式：新旧页面同时存在。
    离开页 absolute 脱离文档流（其 fixed 全屏背景仍正常覆盖视口），

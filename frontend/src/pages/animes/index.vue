@@ -18,9 +18,26 @@ const pending = ref(false);
 
 const allAnimes = ref<any[]>([]);
 
+// 分组入场完成标记：入场动画期间胶囊的 backdrop-filter 处于失效的合成层中，
+// 时间轴节点/竖线会以未磨砂的亮环浮于标签上方，故必须等入场结束（含缓冲）后再渲染
+const enteredLabels = ref(new Set<string>());
+let settleTimer: ReturnType<typeof setTimeout> | undefined;
+const markGroupEntered = (el: Element) => {
+  const label = (el as HTMLElement).dataset.label;
+  if (!label) return;
+  clearTimeout(settleTimer);
+  settleTimer = setTimeout(() => {
+    enteredLabels.value = new Set([...enteredLabels.value, label]);
+  }, 300);
+};
+
 // 拉取一页数据
 const loadData = async () => {
   pending.value = true;
+  if (page.value === 1) {
+    clearTimeout(settleTimer);
+    enteredLabels.value = new Set();
+  }
   try {
     const res: any = await fetchAnimes({
       page: page.value,
@@ -190,17 +207,24 @@ const renderStars = (rating: number) => {
           </div>
 
           <div v-else-if="groupedItems.length" :key="viewMode + order" class="space-y-16 relative">
-            <!-- Central Timeline Line -->
+            <!-- Central Timeline Line：首个分组落定后再生长 -->
             <div
-              class="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-white/20 via-white/10 to-transparent -translate-x-1/2 hidden md:block"
+              v-if="enteredLabels.size"
+              class="timeline-line absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-white/20 via-white/10 to-transparent -translate-x-1/2 hidden md:block"
             ></div>
 
-            <TransitionGroup name="list" appear>
-              <div v-for="group in groupedItems" :key="group.label" class="relative group/section">
+            <TransitionGroup name="list" appear @after-enter="markGroupEntered" @after-appear="markGroupEntered">
+              <div
+                v-for="group in groupedItems"
+                :key="group.label"
+                :data-label="group.label"
+                class="relative group/section"
+              >
                 <!-- Group Header -->
                 <div class="flex items-center justify-center mb-10 relative z-10">
                   <div
-                    class="hidden md:block absolute left-1/2 -translate-x-1/2 w-4 h-4 rounded-full border-2 border-white/50 bg-primary/20 backdrop-blur-sm z-0"
+                    v-if="enteredLabels.has(group.label)"
+                    class="timeline-node hidden md:block absolute left-1/2 -translate-x-1/2 w-4 h-4 rounded-full border-2 border-white/50 bg-primary/20 backdrop-blur-sm z-0"
                   ></div>
 
                   <div
@@ -368,5 +392,38 @@ const renderStars = (rating: number) => {
   position: absolute;
   width: 100%;
   z-index: 0;
+}
+
+/* 时间轴竖线：分组落定后渲染，自上而下生长 */
+.timeline-line {
+  transform-origin: top center;
+  animation: timeline-line-grow 0.9s cubic-bezier(0.4, 0, 0.2, 1) 0.15s backwards;
+}
+
+@keyframes timeline-line-grow {
+  from {
+    opacity: 0;
+    scale: 1 0;
+  }
+  to {
+    opacity: 1;
+    scale: 1 1;
+  }
+}
+
+/* 时间轴节点：分组落定后渲染，柔和淡入避免突兀 */
+.timeline-node {
+  animation: timeline-node-in 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.05s backwards;
+}
+
+@keyframes timeline-node-in {
+  from {
+    opacity: 0;
+    scale: 0.5;
+  }
+  to {
+    opacity: 1;
+    scale: 1;
+  }
 }
 </style>

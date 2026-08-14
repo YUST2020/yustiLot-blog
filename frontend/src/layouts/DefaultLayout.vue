@@ -9,8 +9,55 @@ const colorMode = useColorMode();
 const { y } = useWindowScroll();
 const route = useRoute();
 
-const toggleTheme = () => {
-  colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark';
+const toggleTheme = (event: MouseEvent) => {
+  const nextMode = colorMode.value === 'dark' ? 'light' : 'dark';
+
+  // 同步应用主题 class，确保截图时已生效；vueuse 的 watch 会幂等地再次应用
+  const applyTheme = () => {
+    const classList = document.documentElement.classList;
+    if (nextMode === 'dark') classList.add('dark');
+    else classList.remove('dark');
+    colorMode.preference = nextMode;
+  };
+
+  const doc = document as Document & {
+    startViewTransition?: (cb: () => void) => {
+      ready: Promise<void>;
+      finished: Promise<void>;
+    };
+  };
+
+  if (!doc.startViewTransition) {
+    applyTheme();
+    return;
+  }
+
+  // 圆心用百分比坐标，规避 devicePixelRatio 缩放导致 px 坐标偏移
+  const target = event.currentTarget as HTMLElement | null;
+  const rect = target?.getBoundingClientRect();
+  const xPct = ((rect ? rect.left + rect.width / 2 : event.clientX) / window.innerWidth) * 100;
+  const yPct = ((rect ? rect.top + rect.height / 2 : event.clientY) / window.innerHeight) * 100;
+
+  const transition = doc.startViewTransition(applyTheme);
+
+  transition.ready
+    .then(() => {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      document.documentElement.animate(
+        {
+          clipPath: [
+            `circle(0% at ${xPct}% ${yPct}%)`,
+            `circle(150% at ${xPct}% ${yPct}%)`,
+          ],
+        },
+        {
+          duration: 300,
+          easing: 'ease-in-out',
+          pseudoElement: '::view-transition-new(root)',
+        },
+      );
+    })
+    .catch(() => {});
 };
 
 const isMenuOpen = ref(false);
