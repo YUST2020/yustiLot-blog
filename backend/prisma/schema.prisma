@@ -41,6 +41,24 @@ model Post {
   @@map("posts")
 }
 
+// ===== 个人作品 =====
+model Project {
+  id          Int      @id @default(autoincrement())
+  name        String   @db.VarChar(255)
+  description String?  @db.VarChar(1000)
+  coverImage  String?  @db.VarChar(512) @map("cover_image")
+  repoUrl     String?  @db.VarChar(512) @map("repo_url")
+  demoUrl     String?  @db.VarChar(512) @map("demo_url")
+  // 与 posts.tags 同一约定：JSON 字符串数组，前端 JSON.parse，后端原样存取
+  techStack   String?  @db.LongText @map("tech_stack")
+  sortOrder   Int      @default(0) @map("sort_order") // 越大越靠前
+  isVisible   Boolean  @default(true) @map("is_visible") @db.TinyInt
+  createdAt   DateTime @default(now()) @map("created_at") @db.DateTime(3)
+  updatedAt   DateTime @default(now()) @updatedAt @map("updated_at") @db.DateTime(3)
+
+  @@map("projects")
+}
+
 // ===== 番剧记录 =====
 model Anime {
   id             Int      @id @default(autoincrement())

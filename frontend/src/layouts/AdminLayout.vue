@@ -5,6 +5,7 @@ import {
   LayoutDashboard,
   FileText,
   Tv,
+  FolderGit2,
   LogOut,
   Sun,
   Moon,
@@ -53,6 +54,7 @@ const navItems: NavItem[] = [
   { to: '/admin', icon: LayoutDashboard, label: '仪表盘', exact: true },
   { to: '/admin/posts', icon: FileText, label: '文章管理' },
   { to: '/admin/animes', icon: Tv, label: '番剧管理' },
+  { to: '/admin/projects', icon: FolderGit2, label: '作品管理' },
 ];
 </script>
 

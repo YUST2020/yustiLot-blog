@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { useRoute } from 'vue-router';
-import { Sun, Moon, Menu, X, Home, BookOpen, Tv, LayoutDashboard, User } from 'lucide-vue-next';
+import { Sun, Moon, Menu, X, Home, BookOpen, Tv, LayoutDashboard, User, FolderGit2 } from 'lucide-vue-next';
 import { useWindowScroll } from '@vueuse/core';
 import { useColorMode } from '@/composables/useColorMode';
 
@@ -63,7 +63,7 @@ const toggleTheme = (event: MouseEvent) => {
 const isMenuOpen = ref(false);
 
 const isScrolled = computed(() => y.value > 50);
-const isTransparentPage = computed(() => ['/', '/blog', '/about', '/animes'].includes(route.path));
+const isTransparentPage = computed(() => ['/', '/blog', '/about', '/animes', '/projects'].includes(route.path));
 const showScrolledStyle = computed(() => !isTransparentPage.value || isScrolled.value);
 const isHomePage = computed(() => route.path === '/');
 const shouldShowDarkText = computed(() => {
@@ -123,6 +123,14 @@ const shouldShowDarkText = computed(() => {
             <span>番剧</span>
           </RouterLink>
           <RouterLink
+            to="/projects"
+            class="px-5 py-2 rounded-md transition-all duration-300 hover:scale-105 active:scale-95 flex items-center gap-2"
+            :class="shouldShowDarkText ? 'hover:bg-secondary text-foreground' : 'text-white/90 hover:bg-white/10 hover:text-white backdrop-blur-sm'"
+          >
+            <FolderGit2 class="w-4 h-4" />
+            <span>作品</span>
+          </RouterLink>
+          <RouterLink
             to="/about"
             class="px-5 py-2 rounded-md transition-all duration-300 hover:scale-105 active:scale-95 flex items-center gap-2"
             :class="shouldShowDarkText ? 'hover:bg-secondary text-foreground' : 'text-white/90 hover:bg-white/10 hover:text-white backdrop-blur-sm'"
@@ -176,6 +184,10 @@ const shouldShowDarkText = computed(() => {
           <RouterLink to="/blog" @click="isMenuOpen = false" class="transition-colors hover:text-primary flex items-center gap-2">
             <BookOpen class="w-4 h-4" />
             <span>博客</span>
+          </RouterLink>
+          <RouterLink to="/projects" @click="isMenuOpen = false" class="transition-colors hover:text-primary flex items-center gap-2">
+            <FolderGit2 class="w-4 h-4" />
+            <span>作品</span>
           </RouterLink>
           <RouterLink to="/about" @click="isMenuOpen = false" class="transition-colors hover:text-primary flex items-center gap-2">
             <User class="w-4 h-4" />

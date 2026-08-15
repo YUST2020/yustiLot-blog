@@ -211,7 +211,7 @@ const lightGradientClasses = computed(() => {
     case 'purple':
       return 'from-fuchsia-500 via-purple-400 to-indigo-400'
     case 'green':
-      return 'from-emerald-500 via-teal-400 to-cyan-300'
+      return 'from-emerald-400 via-teal-300 to-cyan-200'
     case 'orange':
       return 'from-orange-400 via-amber-300 to-yellow-300'
     case 'rose':
@@ -228,7 +228,7 @@ const darkGradientClasses = computed(() => {
     case 'purple':
       return 'from-slate-950 via-purple-950 to-indigo-950'
     case 'green':
-      return 'from-green-950 via-emerald-950 to-teal-950'
+      return 'from-slate-950 via-emerald-900 to-slate-950'
     case 'orange':
       return 'from-orange-950 via-amber-950 to-yellow-950'
     case 'rose':

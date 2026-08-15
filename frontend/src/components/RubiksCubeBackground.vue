@@ -118,7 +118,7 @@ const BLOOM_CONFIG = {
 };
 // 粒子星尘：近景细尘 + 远景星尘双层，填满魔方与外围之间的空旷带
 const PARTICLE_COLORS = {
-  day: 0xc9a227,   // 日间用暖金，在浅背景上也能看见
+  day: 0xa16207,   // 日间用深蜜金：亮度低一档，与冷蓝底在明度和色相上同时拉开差距
   night: 0x9ec5ff  // 夜间冷蓝白
 };
 interface DustFieldConfig {
@@ -136,9 +136,9 @@ const DUST_FIELDS: DustFieldConfig[] = [
   { count: 240, rMin: 8, rMax: 18, size: 0.26, spin: 0.00025, opacityDay: 0.45, opacityNight: 0.5 },    // 远景大光斑（bokeh）
 ];
 
-// 主题背景色：日间清透冷灰蓝（衬托糖彩贴色），夜间深炭
+// 主题背景色：日间压深一档的冷蓝灰（衬托星尘与糖彩贴色），夜间深炭
 const BG_COLOR = {
-  day: 0xeef1f6,
+  day: 0xd9e2f2,
   night: 0x121212
 };
 

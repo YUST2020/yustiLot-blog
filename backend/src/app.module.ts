@@ -6,6 +6,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { JwtAuthGuard } from './modules/auth/jwt-auth.guard';
 import { PostsModule } from './modules/posts/posts.module';
 import { AnimesModule } from './modules/animes/animes.module';
+import { ProjectsModule } from './modules/projects/projects.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { AnimesModule } from './modules/animes/animes.module';
     AuthModule,
     PostsModule,
     AnimesModule,
+    ProjectsModule,
   ],
   providers: [
     // 全局守卫：默认所有接口需鉴权，@Public() 标记的豁免
